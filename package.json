@@ -1,0 +1,27 @@
+{
+  "name": "pocketid-webfinger-server",
+  "version": "1.0.0",
+  "description": "WebFinger server for PocketID decentralized identity",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "express-rate-limit": "^6.7.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "keywords": [
+    "webfinger",
+    "pocketid",
+    "decentralized-identity",
+    "rfc7033",
+    "docker"
+  ],
+  "author": "Your Name",
+  "license": "MIT"
+}
