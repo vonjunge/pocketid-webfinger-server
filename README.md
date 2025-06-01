@@ -21,18 +21,27 @@ PocketID is a decentralized identity solution that allows you to own and control
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/nikolausvonjunge/pocketid-webfinger-server.git
+git clone https://github.com/vonjunge/pocketid-webfinger-server.git
 cd pocketid-webfinger-server
 ```
 
 ### 2. Configure Your Identity
 
-Edit the `docker-compose.yml` file to configure your identity:
+1. Create your configuration file by copying the example:
+
+```bash
+# Copy the example configuration file
+cp user_conf.example.env user_conf.env
+```
+
+2. Edit the `user_conf.env` file to configure your identity:
 
 ```yaml
 # Replace with your actual email and identity URL
-- USER_1_EMAIL=your-email@your-domain.com
-- USER_1_LINK_1_HREF=https://your-identity-provider.com
+USER_1_EMAIL=your-email@your-domain.com
+USER_1_LINK_1_REL=self
+USER_1_LINK_1_TYPE=application/activity+json
+USER_1_LINK_1_HREF=https://your-identity-provider.com
 ```
 
 ### 3. Start the Server
@@ -64,7 +73,8 @@ You should see a JSON response with your identity information.
 For production use, you'll need to:
 
 1. **Deploy this container to a server with your domain**
-2. **Set up a reverse proxy (nginx, Apache, etc.)** to route `/.well-known/webfinger` requests to this container on port 3000
+2. **Make sure you've created your `user_conf.env` file** from the example and populated it with your real identity information
+3. **Set up a reverse proxy (nginx, Apache, etc.)** to route `/.well-known/webfinger` requests to this container on port 3000
 3. **Ensure HTTPS is properly configured** (required for WebFinger)
 4. **Configure security environment variables:**
    ```yaml
@@ -112,20 +122,20 @@ server {
 
 ### Multiple Users
 
-You can configure multiple identities by adding more user blocks:
+You can configure multiple identities by adding more user blocks to your `user_conf.env` file:
 
-```yaml
+```
 # User 1
-- USER_1_EMAIL=alice@example.com
-- USER_1_LINK_1_REL=self
-- USER_1_LINK_1_TYPE=application/activity+json
-- USER_1_LINK_1_HREF=https://id.example.com
+USER_1_EMAIL=alice@example.com
+USER_1_LINK_1_REL=self
+USER_1_LINK_1_TYPE=application/activity+json
+USER_1_LINK_1_HREF=https://id.example.com
 
 # User 2  
-- USER_2_EMAIL=bob@example.com
-- USER_2_LINK_1_REL=self
-- USER_2_LINK_1_TYPE=application/activity+json
-- USER_2_LINK_1_HREF=https://id.example.com
+USER_2_EMAIL=bob@example.com
+USER_2_LINK_1_REL=self
+USER_2_LINK_1_TYPE=application/activity+json
+USER_2_LINK_1_HREF=https://id.example.com
 ```
 
 ### Environment Variables Reference

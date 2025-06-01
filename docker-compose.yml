@@ -3,22 +3,22 @@ version: '3.8'
 services:
   webfinger:
     build: .
-    # WARNING: Only uncomment ports for testing! 
-    # In production, use a reverse proxy instead of exposing ports directly
-    # ports:
-    #   - "3000:3000"
+    # Ports are not exposed in production - access via reverse proxy only
     environment:
       - PORT=3000
-      
-      # User 1: Alice
-      - USER_1_EMAIL=alice@example.com
-      - USER_1_LINK_1_REL=self
-      - USER_1_LINK_1_TYPE=application/activity+json
-      - USER_1_LINK_1_HREF=https://id.example.com
-      
-      # User 2: Bob
-      - USER_2_EMAIL=bob@example.com
-      - USER_2_LINK_1_REL=self
-      - USER_2_LINK_1_TYPE=application/activity+json
-      - USER_2_LINK_1_HREF=https://id.example.com
-    restart: unless-stopped
+      - NODE_ENV=production
+    env_file:
+      - user_conf.env
+    restart: always
+    networks:
+      - proxy
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:3000/.well-known/webfinger"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
+
+networks:
+  proxy:
+    external: true
