@@ -8,6 +8,8 @@ This RFC 7033 WebFinger server implementation allows you to host your own WebFin
 
 PocketID is a decentralized identity solution that allows you to own and control your digital identity. However, it requires a WebFinger endpoint for proper discovery and linking functionality. Most hosting providers don't offer WebFinger services out of the box, so this Docker container fills that gap by providing a simple, self-hosted WebFinger server.
 
+**⚠️ Important**: For OpenID Connect compatibility, the WebFinger response must include a link with `rel="http://openid.net/specs/connect/1.0/issuer"` pointing to your identity provider. This server is configured to include this link in the response.
+
 **⚠️ Important**: This container is designed to run behind a reverse proxy (nginx, Apache, etc.) and should **NOT** be exposed directly to the internet. The reverse proxy handles SSL termination and routes `/.well-known/webfinger` requests to this container.
 
 ## Prerequisites
@@ -42,6 +44,9 @@ USER_1_EMAIL=your-email@your-domain.com
 USER_1_LINK_1_REL=self
 USER_1_LINK_1_TYPE=application/activity+json
 USER_1_LINK_1_HREF=https://your-identity-provider.com
+# Required for OpenID Connect
+USER_1_LINK_2_REL=http://openid.net/specs/connect/1.0/issuer
+USER_1_LINK_2_HREF=https://your-identity-provider.com
 ```
 
 ### 3. Start the Server
@@ -130,12 +135,16 @@ USER_1_EMAIL=alice@example.com
 USER_1_LINK_1_REL=self
 USER_1_LINK_1_TYPE=application/activity+json
 USER_1_LINK_1_HREF=https://id.example.com
+USER_1_LINK_2_REL=http://openid.net/specs/connect/1.0/issuer
+USER_1_LINK_2_HREF=https://id.example.com
 
 # User 2  
 USER_2_EMAIL=bob@example.com
 USER_2_LINK_1_REL=self
 USER_2_LINK_1_TYPE=application/activity+json
 USER_2_LINK_1_HREF=https://id.example.com
+USER_2_LINK_2_REL=http://openid.net/specs/connect/1.0/issuer
+USER_2_LINK_2_HREF=https://id.example.com
 ```
 
 ### Environment Variables Reference
